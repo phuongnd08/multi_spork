@@ -7,6 +7,7 @@ module MultiSpork
   autoload :TestResolver, "multi_spork/test_resolver"
   autoload :ShellExecutor, "multi_spork/shell_executor"
   autoload :Configuration, "multi_spork/configuration"
+  autoload :Main, "multi_spork/main"
 
   class << self
     def prefork

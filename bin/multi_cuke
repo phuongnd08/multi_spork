@@ -2,64 +2,10 @@
 # vim: syn=ruby
 
 $:.unshift File.expand_path("../../lib", __FILE__)
-
-require 'rubygems'
-require 'parallel'
-require 'optparse'
 require 'multi_spork'
 
-paths = []
-worker_pool = MultiSpork.config.worker_pool
-worker = nil
+test_cmd = "bundle exec cucumber features/support features/step_definitions --drb"
+test_surfix = ".feature"
+banner = "Usage: multi_cuke [option] [feature_dir ...] [feature_file ...]"
 
-OptionParser.new do |opts|
-  opts.summary_width = 28
-  opts.banner = "Usage: multi_cuke [option] [feature_dir ...] [feature_file ...]"
-
-  def opts.show_usage
-    puts self
-    exit 1
-  end
-
-  opts.on("-w COUNT", "--worker=COUNT", "Set number of worker to COUNT. Default to value set by config/multi_spork of current directory or number of system processors") do |count|
-    worker = count.to_i
-  end
-
-  opts.on_tail("-h", "--help", "Shows this help message") do
-    opts.show_usage
-  end
-
-  opts.show_usage if ARGV.empty?
-
-  begin
-    opts.order(ARGV) do |path|
-      paths << path
-    end
-  rescue OptionParser::ParseError => e
-    opts.warn e.message
-    opts.show_usage
-  end
-end
-
-if worker.nil?
-  puts "Worker is not provided. Use worker_pool (#{worker_pool})"
-  worker = worker_pool
-end
-
-if worker > 0
-  if paths.length > 0
-    start = Time.now
-    MultiSpork::TestExecutor.run_in_parallel(
-      "bundle exec cucumber features/support features/step_definitions --drb",
-      MultiSpork::TestResolver.resolve(paths, ".feature"),
-      worker
-    )
-    puts "Test run finished in #{Time.now - start} seconds"
-  else
-    warn "No features found in the given options"
-    exit 1
-  end
-else
-  warn "Worker set to 0. Won't run test"
-  exit 2
-end
+MultiSpork::Main.new(test_cmd, test_surfix, banner).run
