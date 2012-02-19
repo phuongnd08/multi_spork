@@ -1,4 +1,5 @@
-require File.expand_path("../lib/multi_spork/version", __FILE__)
+$:.unshift File.expand_path("../lib", __FILE__)
+require "multi_spork/version"
 
 Gem::Specification.new do |s|
   s.name = "multi_spork"
