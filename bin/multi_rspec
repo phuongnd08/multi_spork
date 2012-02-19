@@ -12,5 +12,5 @@ MultiSpork::Main.new(
   :test_cmd => test_cmd,
   :test_surfix => test_surfix,
   :banner => banner,
-  :reducer => MultiSpork::RSpecReducer
+  :reducer => MultiSpork::RSpecReducer.new
 ).run
