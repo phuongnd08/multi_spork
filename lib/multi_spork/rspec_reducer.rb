@@ -3,7 +3,7 @@ module MultiSpork
     class << self
       def reduce(outputs)
         results = outputs.map do |output|
-          line = output.split("\n", -1)[-2]
+          line = find_result(output)
           if line && !line.empty?
             line.scan(/(\d+) (\w+?)s?\b/)
           else
@@ -21,6 +21,10 @@ module MultiSpork
 
         summary.map { |term, count| "#{count} #{term}#{'s' if count != 1}" }.
           join(", ")
+      end
+
+      def find_result(output)
+        output.split("\n").detect { |line| line =~ /(\d+) example/ && line =~ /(\d+) failure/ }
       end
     end
   end
