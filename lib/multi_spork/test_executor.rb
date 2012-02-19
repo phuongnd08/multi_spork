@@ -10,7 +10,7 @@ module MultiSpork
       def run_sets(base_cmd, groups, processes_count)
         Parallel.map(groups.keys, :in_processes => processes_count) do |index|
           if groups[index].empty?
-            {:stdout => '', :exit_status => 0}
+            ''
           else
             MultiSpork::TestExecutor.run(base_cmd, groups[index])
           end

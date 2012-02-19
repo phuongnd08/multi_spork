@@ -8,4 +8,8 @@ test_cmd = "bundle exec cucumber features/support features/step_definitions --dr
 test_surfix = ".feature"
 banner = "Usage: multi_cuke [option] [feature_dir ...] [feature_file ...]"
 
-MultiSpork::Main.new(test_cmd, test_surfix, banner).run
+MultiSpork::Main.new(
+  :test_cmd => test_cmd,
+  :test_surfix => test_surfix,
+  :banner => banner
+).run

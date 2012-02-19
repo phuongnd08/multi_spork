@@ -10,10 +10,13 @@ module MultiSpork
     attr_accessor :test_cmd
     attr_accessor :test_surfix
     attr_accessor :banner
+    attr_accessor :reducer
 
-    def initialize(test_cmd, test_surfix, banner)
-      self.test_cmd = test_cmd
-      self.test_surfix = test_surfix
+    def initialize(attrs)
+      attrs.each do |attr, value|
+        send(:"#{attr}=", value)
+      end
+
       self.paths = []
       self.worker_pool = MultiSpork.config.worker_pool
       self.worker = nil
@@ -33,12 +36,13 @@ module MultiSpork
         if worker > 0
           if paths.length > 0
             start = Time.now
-            MultiSpork::TestExecutor.run_in_parallel(
+            outputs = MultiSpork::TestExecutor.run_in_parallel(
               test_cmd,
               MultiSpork::TestResolver.resolve(paths, test_surfix),
               worker
             )
             puts "Test run finished in #{Time.now - start} seconds"
+            puts reducer.reduce(outputs) if reducer
           else
             warn "No features found in the given options"
             exit 1

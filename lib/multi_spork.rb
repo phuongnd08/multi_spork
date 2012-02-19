@@ -8,6 +8,7 @@ module MultiSpork
   autoload :ShellExecutor, "multi_spork/shell_executor"
   autoload :Configuration, "multi_spork/configuration"
   autoload :Main, "multi_spork/main"
+  autoload :RSpecReducer, "multi_spork/rspec_reducer"
 
   class << self
     def prefork
