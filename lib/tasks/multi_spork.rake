@@ -1,8 +1,8 @@
 require 'active_record'
 require 'multi_spork'
 
-namespace :multi_spork do
-  namespace :db do
+namespace :db do
+  namespace :multi_spork do
     def for_each_test_db
       org_test_configuration = ActiveRecord::Base.configurations['test']
       MultiSpork.config.worker_pool.times do |index|
