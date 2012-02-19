@@ -1,5 +1,6 @@
 require "spork"
 require 'parallel'
+require 'multi_spork/railtie'
 
 module MultiSpork
   autoload :TestExecutor, "multi_spork/test_executor"
