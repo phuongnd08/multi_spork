@@ -5,7 +5,7 @@ require 'ruby-debug'
 namespace :multi_spork do
   namespace :testdbs do
     desc "Clone schema of development db to test dbs to be used by multi_spork worker"
-    task :clone do
+    task :clone => "db:load_config" do
       debugger
       org_test_configuration = ActiveRecord::Base.configurations['test']
 
