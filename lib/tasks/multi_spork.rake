@@ -1,9 +1,5 @@
-require 'active_support/core_ext/object/inclusion'
 require 'active_record'
-require File.expand_path("../active_record_helper", __FILE__)
 require 'multi_spork'
-
-include ActiveRecordExtractedHelpers
 
 namespace :multi_spork do
   namespace :testdbs do
