@@ -4,8 +4,8 @@ module MultiSpork
       results.inject({}) do |hash, result|
         result.inject(hash) do |hash, (count, term)|
           hash[term] ||= 0
-        hash[term] += count.to_i
-        hash
+          hash[term] += count.to_i
+          hash
         end
       end
     end
