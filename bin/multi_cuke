@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 # vim: syn=ruby
 
+$:.unshift File.expand_path("../../lib", __FILE__)
+
 require 'rubygems'
 require 'parallel'
+require 'optparse'
+require 'multi_spork'
 
-require File.expand_path("../../lib/multi_spork", __FILE__)
 begin
   require File.expand_path("config/multi_spork", Dir.pwd)
 rescue LoadError
@@ -12,7 +15,7 @@ rescue LoadError
 end
 
 paths = []
-runner_count = MultiSpork.runner_count
+runner_count = MultiSpork.config.runner_count
 
 OptionParser.new do |opts|
   opts.summary_width = 28
