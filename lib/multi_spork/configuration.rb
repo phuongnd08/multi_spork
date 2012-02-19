@@ -1,11 +1,11 @@
 module MultiSpork
   class Configuration
-    def runner_count
-      @runner_count || Parallel.processor_count
+    def worker_pool
+      @worker_pool || Parallel.processor_count
     end
 
-    def runner_count=(count)
-      @runner_count = count
+    def worker_pool=(size)
+      @worker_pool = size
     end
   end
 end

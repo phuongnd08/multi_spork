@@ -11,11 +11,12 @@ require 'multi_spork'
 begin
   require File.expand_path("config/multi_spork", Dir.pwd)
 rescue LoadError
-  puts "File config/multi_spork cannot be found. Use default number of test runner (i.e #{MultiSpork.config.runner_count})"
+  puts "File config/multi_spork cannot be found. Assuming worker pool #{MultiSpork.config.worker_pool})"
 end
 
 paths = []
-runner_count = MultiSpork.config.runner_count
+worker_pool = MultiSpork.config.worker_pool
+worker = nil
 
 OptionParser.new do |opts|
   opts.summary_width = 28
@@ -26,8 +27,8 @@ OptionParser.new do |opts|
     exit 1
   end
 
-  opts.on("-r COUNT", "--runner-count=COUNT", "Set number of runner count to COUNT. Default to value set by config/multi_spork of current directory or number of system processors") do |count|
-    runner_count = count.to_i
+  opts.on("-w COUNT", "--worker=COUNT", "Set number of worker to COUNT. Default to value set by config/multi_spork of current directory or number of system processors") do |count|
+    worker = count.to_i
   end
 
   opts.on_tail("-h", "--help", "Shows this help message") do
@@ -46,13 +47,18 @@ OptionParser.new do |opts|
   end
 end
 
-if runner_count > 0
+if worker.nil?
+  puts "Worker is not provided. Use worker_pool (#{worker_pool})"
+  worker = worker_pool
+end
+
+if worker > 0
   if paths.length > 0
     start = Time.now
     MultiSpork::TestExecutor.run_in_parallel(
       "bundle exec cucumber features/support features/step_definitions --drb",
       MultiSpork::TestResolver.resolve(paths, ".feature"),
-      runner_count
+      worker
     )
     puts "Test run finished in #{Time.now - start} seconds"
   else
@@ -60,6 +66,6 @@ if runner_count > 0
     exit 1
   end
 else
-  warn "Runner count set to 0. Won't run test"
+  warn "Worker set to 0. Won't run test"
   exit 2
 end
