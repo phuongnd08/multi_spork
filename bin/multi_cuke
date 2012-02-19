@@ -7,7 +7,7 @@ require 'parallel'
 require File.expand_path("../../lib/multi_spork", __FILE__)
 begin
   require File.expand_path("config/multi_spork", Dir.pwd)
-rescue
+rescue LoadError
   puts "File config/multi_spork cannot be found. Use default number of test runner (i.e #{MultiSpork.config.runner_count})"
 end
 
