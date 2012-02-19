@@ -42,7 +42,7 @@ module MultiSpork
               worker
             )
             puts "Test run finished in #{Time.now - start} seconds"
-            puts reducer.reduce(outputs) if reducer
+            puts "SUMMARY: " + reducer.reduce(outputs) if reducer
           else
             warn "No features found in the given options"
             exit 1
