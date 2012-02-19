@@ -40,6 +40,8 @@ Spork.each_run do
     db_index = (Spork.run_count % db_count) + 1
     config = YAML.load(ERB.new(Rails.root.join('config/database.yml').read).result)['test']
     config["database"] += db_index.to_s
+    puts "Connecting to database with this config"
+    pp config
     ActiveRecord::Base.establish_connection(config)
   end
   MultiSpork.each_run_block.call if MultiSpork.each_run_block
