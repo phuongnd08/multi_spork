@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# vim: syn=ruby
+
+$:.unshift File.expand_path("../../lib", __FILE__)
+require 'multi_spork'
+
+test_cmd = "bundle exec rspec --drb"
+test_surfix = "_spec.rb"
+banner = "Usage: multi_rspec [option] [spec_dir...] [spec_file...]"
+
+MultiSpork::Main.new(test_cmd, test_surfix, banner).run

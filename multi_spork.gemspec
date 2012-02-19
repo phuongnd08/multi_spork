@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.description = "Run cucumber and rspec in parallel, and with spork"
 
   s.files = Dir["README.md", "LICENSE", "lib/**/*.rb", "lib/tasks/*.rake"]
-  s.executables = ["multi_cuke"]
+  s.executables = ["multi_cuke", "multi_rspec"]
 
   s.add_dependency "spork", "~> 0.9.0"
   s.add_dependency "parallel"
