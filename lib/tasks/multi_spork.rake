@@ -1,10 +1,12 @@
 require 'active_record'
 require 'multi_spork'
+require 'ruby-debug'
 
 namespace :multi_spork do
   namespace :testdbs do
     desc "Clone schema of development db to test dbs to be used by multi_spork worker"
     task :clone do
+      debugger
       org_test_configuration = ActiveRecord::Base.configurations['test']
 
       Rake::Task["db:schema:dump"].invoke
