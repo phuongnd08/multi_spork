@@ -9,8 +9,10 @@ module MultiSpork
   class << self
     attr_accessor :each_run_block
 
-    def prefork &block
-      Spork.prefork &block
+    def prefork
+      Spork.prefork do
+        yield
+      end
 
       if defined? ActiveRecord::Base
         ActiveRecord::Base.connection.disconnect!
