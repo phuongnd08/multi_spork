@@ -50,7 +50,7 @@ if runner_count > 0
   if paths.length > 0
     start = Time.now
     MultiSpork::TestExecutor.run_in_parallel(
-      "bundle exec cucumber features/support features/step_definitions",
+      "bundle exec cucumber features/support features/step_definitions --drb",
       MultiSpork::TestResolver.resolve(paths, ".feature"),
       runner_count
     )
