@@ -10,6 +10,7 @@ module MultiSpork
   autoload :Main, "multi_spork/main"
   autoload :ResultReducer, "multi_spork/result_reducer"
   autoload :RSpecReducer, "multi_spork/rspec_reducer"
+  autoload :CukeReducer, "multi_spork/cuke_reducer"
 
   class << self
     def prefork

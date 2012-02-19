@@ -7,7 +7,7 @@ describe MultiSpork::RSpecReducer do
     let(:output3) { "\n9 examples, 6 failures, 3 pending\n" }
 
     it "cramps results into 1 single summary" do
-      MultiSpork::RSpecReducer.new.reduce([output1, output2, output3]).should == "24 examples, 15 failures, 5 pendings"
+      MultiSpork::RSpecReducer.new.summarize([output1, output2, output3]).should == "24 examples, 15 failures, 5 pendings"
     end
   end
 end

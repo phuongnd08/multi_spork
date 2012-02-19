@@ -11,5 +11,6 @@ banner = "Usage: multi_cuke [option] [feature_dir ...] [feature_file ...]"
 MultiSpork::Main.new(
   :test_cmd => test_cmd,
   :test_surfix => test_surfix,
-  :banner => banner
+  :banner => banner,
+  :reducer => MultiSpork::CukeReducer.new
 ).run
