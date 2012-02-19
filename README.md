@@ -3,8 +3,8 @@
 # Intro #
 Spork is awesome for running cucumber and rspec tests as it cuts time on loading the whole Rails framework.
 However, with the multicore architect so common nowadays, running tests in one single process is a waste.
-There are solutions out there like parallel_tests but parallel is not taking advantage of process forking.
-multi_spork is taking idea from parallel_tests, and it stacks over forking model of spork as well.
+There are solutions out there like parallel_tests but parallel_tests is not taking advantage of process forking.
+multi_spork is trying to bring the best of both: it takes idea from parallel_tests, and it stacks over forking model of spork as well.
 
 # Installation #
 ## Change the Gemfile ##
