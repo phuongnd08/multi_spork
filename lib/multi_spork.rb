@@ -20,8 +20,9 @@ module MultiSpork
     def each_run
       Spork.each_run do
         if defined?(ActiveRecord::Base) && defined?(Rails)
-          db_count = MultiSpork.config.worker_pool
-          db_index = (Spork.run_count % db_count) + 1
+          require File.expand_path("config/multi_spork", Rails.root)
+          db_pool = MultiSpork.config.worker_pool
+          db_index = (Spork.run_count % db_pool) + 1
           config = YAML.load(ERB.new(Rails.root.join('config/database.yml').read).result)['test']
           config["database"] += db_index.to_s
           ActiveRecord::Base.establish_connection(config)
