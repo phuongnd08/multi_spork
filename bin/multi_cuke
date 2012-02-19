@@ -8,12 +8,6 @@ require 'parallel'
 require 'optparse'
 require 'multi_spork'
 
-begin
-  require File.expand_path("config/multi_spork", Dir.pwd)
-rescue LoadError
-  puts "File config/multi_spork cannot be found. Assuming worker pool #{MultiSpork.config.worker_pool})"
-end
-
 paths = []
 worker_pool = MultiSpork.config.worker_pool
 worker = nil

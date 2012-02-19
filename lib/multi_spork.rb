@@ -19,11 +19,10 @@ module MultiSpork
 
     def each_run
       Spork.each_run do
-        if defined?(ActiveRecord::Base) && defined?(Rails)
-          require File.expand_path("config/multi_spork", Rails.root)
+        if defined?(ActiveRecord::Base)
           db_pool = MultiSpork.config.worker_pool
           db_index = (Spork.run_count % db_pool) + 1
-          config = YAML.load(ERB.new(Rails.root.join('config/database.yml').read).result)['test']
+          config = ActiveRecord::Base.configurations['test'].clone
           config["database"] += db_index.to_s
           ActiveRecord::Base.establish_connection(config)
         end
@@ -39,4 +38,16 @@ module MultiSpork
       yield config
     end
   end
+end
+
+config_path = if defined?(Rails)
+                File.expand_path("config/multi_spork", Rails.root)
+              else
+                File.expand_path("config/multi_spork", Dir.pwd)
+              end
+
+begin
+  require config_path
+rescue LoadError
+  puts "File config/multi_spork cannot be found. Assuming worker pool #{MultiSpork.config.worker_pool})"
 end
