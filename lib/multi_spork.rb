@@ -37,7 +37,7 @@ end
 Spork.each_run do
   if defined?(ActiveRecord::Base) && defined?(Rails)
     db_count = MultiSpork.config.runner_count
-    db_index = (Spork.process_counter % db_count) + 1
+    db_index = (Spork.run_count % db_count) + 1
     config = YAML.load(ERB.new(Rails.root.join('config/database.yml').read).result)['test']
     config["database"] += db_index.to_s
     ActiveRecord::Base.establish_connection(config)
