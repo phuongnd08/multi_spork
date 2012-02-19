@@ -20,10 +20,11 @@ module MultiSpork
     end
 
 
-    def parser
+    def get_parser
       @parser ||= OptionParser.new do |p|
         p.summary_width = 28
         p.banner = banner
+        yield p
       end
     end
 
@@ -47,7 +48,7 @@ module MultiSpork
           exit 2
         end
       else
-        puts parser
+        puts get_parser
         exit 1
       end
     end
@@ -55,25 +56,27 @@ module MultiSpork
     def parse_options
       successful = true
 
-      parser.on("-w COUNT", "--worker=COUNT", "Set number of worker to COUNT. Default to value set by ./config/multi_spork or number of system processors") do |count|
-        self.worker = count.to_i
+      get_parser do |parser|
+        parser.on("-w COUNT", "--worker=COUNT", "Set number of worker to COUNT. Default to value set by ./config/multi_spork or number of system processors") do |count|
+          self.worker = count.to_i
+        end
+
+        parser.on_tail("-h", "--help", "Shows this help message") do
+          successful = false
+        end
+
+        if ARGV.empty?
+          successful = false
+        else
+          parser.order(ARGV) do |path|
+            paths << path
+          end
+        end
       end
 
       if worker.nil?
         puts "Worker is not provided. Use worker_pool (#{worker_pool})"
         self.worker = worker_pool
-      end
-
-      parser.on_tail("-h", "--help", "Shows this help message") do
-        successful = false
-      end
-
-      if ARGV.empty?
-        successful = false
-      else
-        parser.order(ARGV) do |path|
-          paths << path
-        end
       end
 
       successful
