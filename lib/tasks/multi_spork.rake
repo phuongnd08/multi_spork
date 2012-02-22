@@ -19,11 +19,13 @@ namespace :db do
     desc "Clone schema of development db to test dbs to be used by multi_spork worker"
     task :clone => "db:load_config" do
       Rake::Task["db:schema:dump"].invoke
+      Rails.env = 'test' # force test environment so db:create take test configuration
       for_each_test_db do
-        ["db:test:purge", "db:test:load_schema", "db:schema:load"].each do |task_name|
+        ["db:create", "db:test:purge", "db:test:load_schema", "db:schema:load"].each do |task_name|
           Rake::Task[task_name].reenable
         end
 
+        Rake::Task["db:create"].invoke
         Rake::Task["db:test:load_schema"].invoke
       end
     end
