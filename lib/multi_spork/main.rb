@@ -36,13 +36,14 @@ module MultiSpork
         if worker > 0
           if paths.length > 0
             start = Time.now
-            outputs = MultiSpork::TestExecutor.run_in_parallel(
+            success, outputs = MultiSpork::TestExecutor.run_in_parallel(
               test_cmd,
               MultiSpork::TestResolver.resolve(paths, test_surfix),
               worker
             )
             puts "Test run finished in #{Time.now - start} seconds"
             puts "SUMMARY: " + reducer.summarize(outputs) if reducer
+            exit success
           else
             warn "No features found in the given options"
             exit 1

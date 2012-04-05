@@ -19,9 +19,11 @@ describe MultiSpork::TestExecutor do
         groups.keys.length.should == 3
         groups.each { |set| set.length.should == 2 }
         processes_count.should == 3
+        [[true, '1'], [true, '2'], [true, '3']]
       end
 
-      MultiSpork::TestExecutor.run_in_parallel "cmd", (1..6).map(&:to_s), 3
+      results = MultiSpork::TestExecutor.run_in_parallel "cmd", (1..6).map(&:to_s), 3
+      results.should == [true, ['1', '2', '3']]
     end
   end
 

@@ -5,7 +5,7 @@ module MultiSpork
         f = open("|#{cmd}", 'r')
           output = fetch_output(f)
         f.close
-        output
+        return $?.success?, output
       end
 
       def fetch_output(process)
