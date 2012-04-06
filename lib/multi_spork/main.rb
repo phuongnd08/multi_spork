@@ -11,6 +11,7 @@ module MultiSpork
     attr_accessor :test_surfix
     attr_accessor :banner
     attr_accessor :reducer
+    attr_accessor :formatter_class_name
 
     def initialize(attrs)
       attrs.each do |attr, value|
@@ -42,6 +43,21 @@ module MultiSpork
               worker
             )
             puts "Test run finished in #{Time.now - start} seconds"
+
+            if reducer.kind_of?(RSpecReducer) and formatter_class_name
+              results = outputs.map do |output|
+                reducer.read_result(output)
+              end
+              reduced_results = reducer.reduce(results)
+              formatter = instance_eval(formatter_class_name).new(nil)
+              formatter.dump_summary(
+                Time.now - start,
+                reduced_results["example"].to_i,
+                reduced_results["failure"].to_i,
+                reduced_results["pending"].to_i
+              )
+            end
+
             puts "SUMMARY: " + reducer.summarize(outputs) if reducer
             exit success
           else
@@ -68,6 +84,10 @@ module MultiSpork
 
         parser.on("-r PATH", "--require=PATH", "Require a file.") do |path|
           require path
+        end
+
+        parser.on("-f FORMATTER", "--format=FORMATTER", "Choose a formatter (class name).") do |formatter|
+          self.formatter_class_name = formatter
         end
 
         parser.on_tail("-h", "--help", "Shows this help message") do

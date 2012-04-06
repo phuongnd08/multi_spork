@@ -17,10 +17,73 @@ describe MultiSpork::Main do
           "-r",
           File.expand_path(File.dirname(__FILE__) + '/../../spec_test_files/dummy.rb'),
           "-w",
-          "1"
+          "2"
         ]
         subject.parse_options
         $dummy.should be_true
+      end
+    end
+
+    context "when a formatter is specified" do
+      it "should save it" do
+        ARGV.replace [
+          "-f",
+          "DummyFormatter",
+          "-w",
+          "2"
+        ]
+        subject.parse_options
+        subject.formatter_class_name.should == "DummyFormatter"
+      end
+    end
+  end
+
+  describe "run" do
+    context "when a formatter is specified" do
+      class DummyFormatter
+        class << self
+          attr_accessor :duration, :total, :failures, :pending
+        end
+
+        def initialize(_); end
+
+        def dump_summary(duration, total, failures, pending)
+          self.class.duration = duration
+          self.class.total = total
+          self.class.failures = failures
+          self.class.pending = pending
+        end
+      end
+      
+      it "should feed it" do
+        previous_stdout = $stdout
+        $stdout = StringIO.new
+        begin
+          subject.stub!(:formatter_class_name).and_return("DummyFormatter")
+          subject.stub!(:paths).and_return(['a', 'b'])
+          subject.stub!(:worker).and_return(2)
+          subject.should_receive(:parse_options).and_return(true)
+          MultiSpork::TestExecutor.
+            should_receive(:run_in_parallel).
+            with(subject.test_cmd, anything, subject.worker).
+            and_return(
+              [
+                true,
+                [
+                  "10 examples, 4 failures, 2 pending",
+                  "5 examples, 1 failure, 1 pending"
+                ]
+              ]
+            )
+          subject.should_receive(:exit).with(true)
+          subject.run
+          DummyFormatter.duration.should >= 0
+          DummyFormatter.total.should == 15
+          DummyFormatter.failures.should == 5
+          DummyFormatter.pending.should == 3
+        ensure
+          $stdout = previous_stdout
+        end
       end
     end
   end
