@@ -66,6 +66,10 @@ module MultiSpork
           self.worker = count.to_i
         end
 
+        parser.on("-r PATH", "--require=PATH", "Require a file.") do |path|
+          require path
+        end
+
         parser.on_tail("-h", "--help", "Shows this help message") do
           successful = false
         end
