@@ -11,8 +11,8 @@ describe MultiSpork::Main do
   end
 
   describe "parse_options" do
-    context "when a ruby file is specified" do
-      it "should require it" do
+    context "when --require is specified" do
+      it "requires the specified file" do
         ARGV.replace [
           "-r",
           File.expand_path(File.dirname(__FILE__) + '/../../spec_test_files/dummy.rb'),
@@ -24,8 +24,8 @@ describe MultiSpork::Main do
       end
     end
 
-    context "when a formatter is specified" do
-      it "should save it" do
+    context "when --format is specified" do
+      it "saves the specified formatter" do
         ARGV.replace [
           "-f",
           "DummyFormatter",
@@ -55,7 +55,7 @@ describe MultiSpork::Main do
         end
       end
       
-      it "should feed it" do
+      it "feeds it with the test results" do
         previous_stdout = $stdout
         $stdout = StringIO.new
         begin
